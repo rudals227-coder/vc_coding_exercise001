@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import type { Role } from "@/generated/prisma/enums";
-import type { Room, User } from "@/generated/prisma/client";
+import type { Property, Room, User } from "@/generated/prisma/client";
 
 let seq = 0;
 const next = () => `${Date.now()}-${++seq}`;
@@ -22,7 +22,10 @@ export async function makeUser(roles: Role[] = ["GUEST"]): Promise<User> {
 }
 
 /** Property(와 호스트)를 함께 만들고 Room을 반환한다. */
-export async function makeRoom(overrides: Partial<Omit<Room, "id">> = {}): Promise<Room> {
+export async function makeRoom(
+  overrides: Partial<Omit<Room, "id">> = {},
+  propertyOverrides: Partial<Omit<Property, "id" | "hostId">> = {},
+): Promise<Room> {
   const host = await makeUser(["HOST"]);
   const property = await db.property.create({
     data: {
@@ -35,10 +38,11 @@ export async function makeRoom(overrides: Partial<Omit<Room, "id">> = {}): Promi
       lng: 126.92,
       approxLat: 37.551,
       approxLng: 126.921,
-      district: "Mapo-gu",
+      district: "mapo",
       amenities: ["wifi"],
       houseRules: "",
       status: "PUBLISHED",
+      ...propertyOverrides,
     },
   });
   return db.room.create({
