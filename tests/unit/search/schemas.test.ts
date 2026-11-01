@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { ALL_ERROR_CODES } from "@/lib/errors";
 import { searchQuery } from "@/modules/search/schemas";
 
 describe("searchQuery", () => {
@@ -48,5 +49,41 @@ describe("searchQuery", () => {
 
   it("accepts a valid district and roomType", () => {
     expect(searchQuery.safeParse({ district: "mapo", roomType: "PRIVATE" }).success).toBe(true);
+  });
+});
+
+describe("searchQuery issue messages", () => {
+  const bad: Record<string, unknown>[] = [
+    { district: "atlantis" },
+    { roomType: "CASTLE" },
+    { sort: "random" },
+    { page: 0 },
+    { page: "abc" },
+    { minRent: 10, maxRent: 5 },
+    { minRent: -1 },
+    { minRent: "abc" },
+    { maxRent: 1.5 },
+    { options: [1] },
+    { checkIn: "2026-03-01" },
+    { checkIn: "2026-03-01", checkOut: "2026-03-20" },
+    { checkIn: "2026-13-45", checkOut: "2026-04-01" },
+  ];
+  it.each(bad)("every issue message is an ErrorCode: %j", (input) => {
+    const r = searchQuery.safeParse(input);
+    expect(r.success).toBe(false);
+    if (!r.success) {
+      expect(r.error.issues.length).toBeGreaterThan(0);
+      for (const i of r.error.issues) expect(ALL_ERROR_CODES).toContain(i.message);
+    }
+  });
+
+  it("non-object input yields an ErrorCode", () => {
+    const r = searchQuery.safeParse("nope");
+    expect(!r.success && r.error.issues.every((i) => ALL_ERROR_CODES.includes(i.message as never))).toBe(true);
+  });
+
+  it("rent range yields VALIDATION_FAILED", () => {
+    const r = searchQuery.safeParse({ minRent: 10, maxRent: 5 });
+    expect(!r.success && r.error.issues.map((i) => i.message)).toEqual(["VALIDATION_FAILED"]);
   });
 });
