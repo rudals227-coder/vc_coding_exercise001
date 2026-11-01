@@ -92,9 +92,10 @@ export function listingsService(deps: { db: PrismaClient; geocode: Geocoder }) {
       return db.room.update({ where: { id }, data });
     },
 
-    async setRoomPhotos(actor: Actor, id: string, photos: string[]): Promise<Room> {
+    /** 원자적 추가: 동시 업로드가 서로의 사진을 덮어쓰지 않는다. */
+    async appendRoomPhoto(actor: Actor, id: string, url: string): Promise<Room> {
       await ownedRoom(actor, id);
-      return db.room.update({ where: { id }, data: { photos } });
+      return db.room.update({ where: { id }, data: { photos: { push: url } } });
     },
 
     async setStatus(

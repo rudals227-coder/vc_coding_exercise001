@@ -108,6 +108,6 @@ export async function uploadPhotoAction(roomId: string, formData: FormData): Pro
     if (!(file instanceof File) || file.size === 0) throw new DomainError("INVALID_FILE");
 
     const url = await uploadRoomPhoto(room.id, file);
-    await service().setRoomPhotos(user, room.id, [...room.photos, url]);
+    await service().appendRoomPhoto(user, room.id, url);
   });
 }
