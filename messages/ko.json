@@ -23,13 +23,43 @@
     "checkIn": "체크인",
     "checkOut": "체크아웃",
     "submit": "검색",
-    "noResults": "조건에 맞는 숙소가 없습니다."
+    "noResults": "조건에 맞는 숙소가 없습니다.",
+    "district": "지역",
+    "anyDistrict": "전체 지역",
+    "roomType": "방 유형",
+    "anyType": "전체 유형",
+    "minRent": "최소 월세 (원)",
+    "maxRent": "최대 월세 (원)",
+    "sort": "정렬",
+    "sortNewest": "최신순",
+    "sortPriceAsc": "낮은 가격순",
+    "sortPriceDesc": "높은 가격순",
+    "results": "방 {count}개",
+    "listView": "목록",
+    "mapView": "지도",
+    "mapUnavailable": "지도를 지금은 사용할 수 없습니다.",
+    "previous": "이전",
+    "next": "다음"
   },
   "room": {
     "perMonth": "월",
     "deposit": "보증금",
     "approximateLocation": "대략적인 위치",
-    "bookNow": "예약 요청"
+    "bookNow": "예약 요청",
+    "roomTypeLabel": "방 유형",
+    "capacity": "수용 인원: {count}명",
+    "amenities": "편의시설",
+    "options": "옵션",
+    "houseRules": "하우스 규칙",
+    "nights": "{count}박",
+    "quote": {
+      "title": "견적",
+      "pickDates": "날짜를 선택하면 견적을 볼 수 있습니다.",
+      "loading": "계산 중...",
+      "full": "한 달",
+      "prorated": "일할 계산",
+      "rentTotal": "월세 합계"
+    }
   },
   "admin": {
     "title": "호스트 대시보드",

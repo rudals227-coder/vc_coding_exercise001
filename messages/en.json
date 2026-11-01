@@ -23,13 +23,43 @@
     "checkIn": "Check-in",
     "checkOut": "Check-out",
     "submit": "Search",
-    "noResults": "No rooms match your search."
+    "noResults": "No rooms match your search.",
+    "district": "District",
+    "anyDistrict": "Any district",
+    "roomType": "Room type",
+    "anyType": "Any type",
+    "minRent": "Min rent (KRW)",
+    "maxRent": "Max rent (KRW)",
+    "sort": "Sort by",
+    "sortNewest": "Newest",
+    "sortPriceAsc": "Price: low to high",
+    "sortPriceDesc": "Price: high to low",
+    "results": "{count, plural, one {# room} other {# rooms}}",
+    "listView": "List",
+    "mapView": "Map",
+    "mapUnavailable": "The map is not available right now.",
+    "previous": "Previous",
+    "next": "Next"
   },
   "room": {
     "perMonth": "per month",
     "deposit": "Deposit",
     "approximateLocation": "Approximate location",
-    "bookNow": "Request to book"
+    "bookNow": "Request to book",
+    "roomTypeLabel": "Room type",
+    "capacity": "Capacity: {count}",
+    "amenities": "Amenities",
+    "options": "Options",
+    "houseRules": "House rules",
+    "nights": "{count, plural, one {# night} other {# nights}}",
+    "quote": {
+      "title": "Price quote",
+      "pickDates": "Choose your dates to see a quote.",
+      "loading": "Calculating...",
+      "full": "Full month",
+      "prorated": "Partial month",
+      "rentTotal": "Rent total"
+    }
   },
   "admin": {
     "title": "Host dashboard",

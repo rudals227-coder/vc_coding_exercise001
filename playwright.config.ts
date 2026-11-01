@@ -22,7 +22,8 @@ export default defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: `npx next dev -p ${PORT}`,
-    url: `http://localhost:${PORT}/en`,
+    // DB를 읽지 않는 페이지로 준비 상태를 확인한다(globalSetup 전에 스키마가 아직 없을 수 있음).
+    url: `http://localhost:${PORT}/en/sign-in`,
     reuseExistingServer: false,
     timeout: 120_000,
     env: {
