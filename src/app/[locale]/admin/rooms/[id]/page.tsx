@@ -43,6 +43,7 @@ async function Content({ params }: { params: PageProps<"/[locale]/admin/rooms/[i
         <StatusControl kind="room" id={room.id} status={room.status} />
       </div>
 
+      <PhotoUploader roomId={room.id} photos={room.photos} />
       <RoomForm
         roomId={room.id}
         defaults={{
@@ -54,7 +55,6 @@ async function Content({ params }: { params: PageProps<"/[locale]/admin/rooms/[i
           options: room.options,
         }}
       />
-      <PhotoUploader roomId={room.id} photos={room.photos} />
       <RoomBlocks
         roomId={room.id}
         blocks={room.blocks.map((b) => ({

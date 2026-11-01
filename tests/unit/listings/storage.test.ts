@@ -1,7 +1,30 @@
-import { describe, expect, it } from "vitest";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import sharp from "sharp";
-import { sanitizeImage, uploadRoomPhoto } from "@/modules/listings/storage";
+import { sanitizeImage, saveLocalPhoto, uploadRoomPhoto } from "@/modules/listings/storage";
 import { expectCodeAsync } from "../helpers";
+
+describe("saveLocalPhoto", () => {
+  let root: string;
+  beforeEach(async () => {
+    root = await mkdtemp(path.join(tmpdir(), "h2h-photos-"));
+  });
+  afterEach(async () => {
+    await rm(root, { recursive: true, force: true });
+  });
+
+  it("writes the bytes under uploads/rooms/<roomId> and returns a public path", async () => {
+    const url = await saveLocalPhoto("room1", Buffer.from("img"), "jpg", root);
+    expect(url).toMatch(/^\/uploads\/rooms\/room1\/[0-9a-f-]{36}\.jpg$/);
+    expect(await readFile(path.join(root, url))).toEqual(Buffer.from("img"));
+  });
+
+  it("rejects a room id that could escape the uploads folder", async () => {
+    await expectCodeAsync(saveLocalPhoto("../evil", Buffer.from("x"), "jpg", root), "INVALID_FILE");
+  });
+});
 
 describe("uploadRoomPhoto validation", () => {
   it("rejects a non-image type", async () => {

@@ -51,3 +51,6 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# 로컬 개발용 사진 업로드(Supabase 키가 없을 때)
+/public/uploads/
