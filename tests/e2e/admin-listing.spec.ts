@@ -1,5 +1,11 @@
 import { expect, test } from "@playwright/test";
 
+test("unauthenticated visit to admin redirects to sign-in", async ({ page }) => {
+  await page.goto("/en/admin/properties");
+  await expect(page).toHaveURL(/\/en\/sign-in/);
+  await expect(page.getByRole("heading", { name: "Sign in to hometohome" })).toBeVisible();
+});
+
 test.describe("admin listings", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/api/test/login?email=admin@e2e.test");
@@ -20,6 +26,10 @@ test.describe("admin listings", () => {
     // 숙소 상세로 이동한다.
     await expect(page).toHaveURL(/\/en\/admin\/properties\/(?!new)[^/]+$/);
     await expect(page.getByRole("heading", { name: title })).toBeVisible();
+
+    // 편집 화면은 지오코딩된 현재 핀을 보여준다.
+    await expect(page.getByLabel("Latitude")).toHaveValue("37.5563");
+    await expect(page.getByLabel("Longitude")).toHaveValue("126.9236");
 
     // 방 생성: 금액은 콤마로 표시되고 정수로 저장된다.
     await page.getByLabel("Room name").fill("Room A");

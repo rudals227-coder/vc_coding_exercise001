@@ -6,14 +6,25 @@ import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getMapsConfig, SEOUL_CENTER } from "./maps-config";
+import { parsePin, type Pin } from "./pin";
 
-type Pin = { lat: number; lng: number };
-
-// 폼 필드 `lat`/`lng`로 제출된다. 값이 비어 있으면 서버가 주소를 지오코딩한다.
+// 폼 필드 `lat`/`lng`/`pinDirty`로 제출된다. 사용자가 핀을 바꾸지 않았다면(`pinDirty` 비어 있음)
+// 폼은 핀을 보내지 않고, 서버가 필요할 때 주소를 지오코딩한다.
 export function PinPicker({ defaultValue }: { defaultValue?: Pin }) {
   const t = useTranslations("admin.fields");
   const maps = getMapsConfig();
-  const [pin, setPin] = useState<Pin | null>(defaultValue ?? null);
+  const [lat, setLat] = useState(defaultValue ? String(defaultValue.lat) : "");
+  const [lng, setLng] = useState(defaultValue ? String(defaultValue.lng) : "");
+  const [dirty, setDirty] = useState(false);
+  const pin = parsePin(lat, lng);
+
+  function setPin(p: Pin) {
+    setLat(String(p.lat));
+    setLng(String(p.lng));
+    setDirty(true);
+  }
+
+  const dirtyField = <input type="hidden" name="pinDirty" value={dirty ? "1" : ""} />;
 
   if (!maps) {
     return (
@@ -27,10 +38,10 @@ export function PinPicker({ defaultValue }: { defaultValue?: Pin }) {
               name="lat"
               type="number"
               step="any"
-              value={pin?.lat ?? ""}
+              value={lat}
               onChange={(e) => {
-                const lat = e.target.value === "" ? NaN : Number(e.target.value);
-                setPin((p) => (Number.isNaN(lat) ? null : { lat, lng: p?.lng ?? SEOUL_CENTER.lng }));
+                setLat(e.target.value);
+                setDirty(true);
               }}
             />
           </div>
@@ -41,14 +52,15 @@ export function PinPicker({ defaultValue }: { defaultValue?: Pin }) {
               name="lng"
               type="number"
               step="any"
-              value={pin?.lng ?? ""}
+              value={lng}
               onChange={(e) => {
-                const lng = e.target.value === "" ? NaN : Number(e.target.value);
-                setPin((p) => (Number.isNaN(lng) ? null : { lat: p?.lat ?? SEOUL_CENTER.lat, lng }));
+                setLng(e.target.value);
+                setDirty(true);
               }}
             />
           </div>
         </div>
+        {dirtyField}
       </fieldset>
     );
   }
@@ -81,8 +93,9 @@ export function PinPicker({ defaultValue }: { defaultValue?: Pin }) {
           </Map>
         </APIProvider>
       </div>
-      <input type="hidden" name="lat" value={pin?.lat ?? ""} />
-      <input type="hidden" name="lng" value={pin?.lng ?? ""} />
+      <input type="hidden" name="lat" value={lat} />
+      <input type="hidden" name="lng" value={lng} />
+      {dirtyField}
     </div>
   );
 }

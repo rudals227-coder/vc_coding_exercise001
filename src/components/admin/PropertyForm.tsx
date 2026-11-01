@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { PinPicker } from "@/components/map/PinPicker";
+import { serializePin } from "@/components/map/pin";
 import { SEOUL_DISTRICTS } from "@/modules/listings/schemas";
 import {
   createPropertyAction,
@@ -48,9 +49,7 @@ export function PropertyForm({ propertyId, defaults }: { propertyId?: string; de
       amenities: splitList(str("amenities")),
       houseRules: str("houseRules"),
     };
-    const lat = str("lat");
-    const lng = str("lng");
-    const pin = lat !== "" && lng !== "" ? { lat: Number(lat), lng: Number(lng) } : undefined;
+    const pin = serializePin({ lat: str("lat"), lng: str("lng"), dirty: str("pinDirty") === "1" });
 
     start(async () => {
       const res = propertyId

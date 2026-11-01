@@ -3,7 +3,8 @@ import { connection } from "next/server";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { db } from "@/lib/db";
-import { hasRole, requireRole } from "@/modules/auth/roles";
+import { hasRole } from "@/modules/auth/roles";
+import { requirePageRole } from "@/modules/auth/page-guard";
 
 export default function PropertiesPage({ params }: PageProps<"/[locale]/admin/properties">) {
   return (
@@ -19,7 +20,7 @@ async function Content({ params }: { params: PageProps<"/[locale]/admin/properti
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("admin");
-  const user = await requireRole("HOST", "ADMIN");
+  const user = await requirePageRole(locale, "HOST", "ADMIN");
   const properties = await db.property.findMany({
     where: hasRole(user, "ADMIN") ? {} : { hostId: user.id },
     orderBy: { createdAt: "desc" },

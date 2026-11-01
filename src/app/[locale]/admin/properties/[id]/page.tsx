@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { db } from "@/lib/db";
-import { hasRole, requireRole } from "@/modules/auth/roles";
+import { hasRole } from "@/modules/auth/roles";
+import { requirePageRole } from "@/modules/auth/page-guard";
 import { PropertyForm } from "@/components/admin/PropertyForm";
 import { RoomForm } from "@/components/admin/RoomForm";
 import { StatusControl } from "@/components/admin/StatusControl";
@@ -23,7 +24,7 @@ async function Content({ params }: { params: PageProps<"/[locale]/admin/properti
   const { locale, id } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("admin");
-  const user = await requireRole("HOST", "ADMIN");
+  const user = await requirePageRole(locale, "HOST", "ADMIN");
   const property = await db.property.findUnique({
     where: { id },
     include: { rooms: { orderBy: { createdAt: "asc" } } },
@@ -85,6 +86,9 @@ async function Content({ params }: { params: PageProps<"/[locale]/admin/properti
             district: property.district,
             amenities: property.amenities,
             houseRules: property.houseRules,
+            // 소유자/관리자에게만 보이는 정확한 위치(이 페이지는 권한 확인 후에만 렌더된다).
+            lat: property.lat,
+            lng: property.lng,
           }}
         />
       </section>

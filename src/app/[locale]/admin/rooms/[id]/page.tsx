@@ -5,7 +5,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { db } from "@/lib/db";
 import { fromDbDate } from "@/lib/date-only";
-import { hasRole, requireRole } from "@/modules/auth/roles";
+import { hasRole } from "@/modules/auth/roles";
+import { requirePageRole } from "@/modules/auth/page-guard";
 import { PhotoUploader } from "@/components/admin/PhotoUploader";
 import { RoomBlocks } from "@/components/admin/RoomBlocks";
 import { RoomForm } from "@/components/admin/RoomForm";
@@ -25,7 +26,7 @@ async function Content({ params }: { params: PageProps<"/[locale]/admin/rooms/[i
   const { locale, id } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("admin");
-  const user = await requireRole("HOST", "ADMIN");
+  const user = await requirePageRole(locale, "HOST", "ADMIN");
   const room = await db.room.findUnique({
     where: { id },
     include: { property: true, blocks: { orderBy: { startDate: "asc" } } },
