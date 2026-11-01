@@ -9,7 +9,7 @@ export const googleGeocoder: Geocoder = async (address) => {
   url.searchParams.set("region", "kr");
   url.searchParams.set("key", key);
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
     if (!res.ok) return null;
     const body = (await res.json()) as {
       status?: string;

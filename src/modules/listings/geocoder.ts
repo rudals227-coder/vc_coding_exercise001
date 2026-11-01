@@ -5,5 +5,5 @@ const fakeGeocoder: Geocoder = async (address) =>
   address.trim() === "__notfound__" ? null : { lat: 37.5563, lng: 126.9236 };
 
 export function getGeocoder(): Geocoder {
-  return process.env.E2E_FAKE_GEOCODER === "1" ? fakeGeocoder : googleGeocoder;
+  return process.env.E2E_FAKE_GEOCODER === "1" && process.env.NODE_ENV !== "production" ? fakeGeocoder : googleGeocoder;
 }

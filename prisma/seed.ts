@@ -3,7 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL?.trim();
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
   if (!email) {
     console.log("ADMIN_EMAIL is not set; skipping admin seed.");
     return;

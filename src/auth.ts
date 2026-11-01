@@ -27,7 +27,12 @@ function buildProviders(): Provider[] {
   }
   if (env.AUTH_GOOGLE_ID && env.AUTH_GOOGLE_SECRET) {
     providers.push(
-      Google({ clientId: env.AUTH_GOOGLE_ID, clientSecret: env.AUTH_GOOGLE_SECRET }),
+      Google({
+        clientId: env.AUTH_GOOGLE_ID,
+        clientSecret: env.AUTH_GOOGLE_SECRET,
+        // Google이 이메일 소유를 검증하므로, 시드된 관리자/매직링크 사용자도 같은 이메일로 연결된다.
+        allowDangerousEmailAccountLinking: true,
+      }),
     );
   }
   return providers;

@@ -29,4 +29,12 @@ describe("pricing quote", () => {
   it("exact one month yields one FULL segment", () => {
     expect(segments("2026-03-15", "2026-04-15")).toHaveLength(1);
   });
+  it("month-end anchor: 1/31 → 3/10 is one FULL month then 10 prorated nights", () => {
+    const segs = segments("2026-01-31", "2026-03-10");
+    expect(segs.map((s) => [s.start, s.end, s.kind])).toEqual([
+      ["2026-01-31", "2026-02-28", "FULL"],
+      ["2026-02-28", "2026-03-10", "PRORATED"],
+    ]);
+    expect(segs[1].nights).toBe(10);
+  });
 });
