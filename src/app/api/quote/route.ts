@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { z } from "zod";
 import { parseDateOnly } from "@/lib/date-only";
 import { DomainError } from "@/lib/errors";
@@ -29,6 +30,7 @@ export async function GET(req: Request): Promise<Response> {
     return Response.json({ quote: quote(room, checkIn, checkOut) });
   } catch (e) {
     if (e instanceof DomainError) return Response.json({ code: e.code }, { status: 400 });
+    unstable_rethrow(e); // 프리렌더 중단 등 Next 내부 제어 흐름은 그대로 전파한다.
     console.error("GET /api/quote failed", e);
     return Response.json({ code: "INTERNAL" }, { status: 500 });
   }
