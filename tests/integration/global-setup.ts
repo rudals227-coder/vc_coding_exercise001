@@ -5,7 +5,7 @@ import pg from "pg";
 // 통합 테스트는 항상 테스트 DB(DATABASE_URL_TEST)만 사용한다. 개발 DB는 건드리지 않는다.
 // `prisma migrate reset`은 AI 에이전트 실행 시 Prisma가 차단하므로, 동일한 효과를
 // (public 스키마 초기화 + `migrate deploy`)로 구현한다. 데이터 파괴는 테스트 DB로만 한정된다.
-export default async function setup() {
+export async function resetTestDb() {
   config({ quiet: true });
   const url = process.env.DATABASE_URL_TEST;
   if (!url) throw new Error("DATABASE_URL_TEST is required for integration tests");
@@ -33,4 +33,8 @@ export default async function setup() {
     stdio: "inherit",
     env: { ...process.env, DATABASE_URL: url },
   });
+}
+
+export default async function setup() {
+  await resetTestDb();
 }

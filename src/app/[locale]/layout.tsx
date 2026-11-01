@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -52,7 +53,9 @@ export default async function LocaleLayout({
             </Link>
             <nav className="flex items-center gap-4 text-sm">
               <Link href="/sign-in">{t("signIn")}</Link>
-              <LocaleSwitcher />
+              <Suspense fallback={null}>
+                <LocaleSwitcher />
+              </Suspense>
             </nav>
           </header>
           {children}

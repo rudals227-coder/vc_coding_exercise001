@@ -35,7 +35,60 @@
     "title": "Host dashboard",
     "properties": "Properties",
     "newProperty": "Add a property",
-    "forbidden": "You do not have access to this page."
+    "forbidden": "You do not have access to this page.",
+    "noProperties": "You have no properties yet.",
+    "editProperty": "Property details",
+    "rooms": "Rooms",
+    "noRooms": "No rooms yet.",
+    "addRoom": "Add room",
+    "editRoom": "Edit room",
+    "back": "Back",
+    "saved": "Saved.",
+    "publish": "Publish",
+    "hide": "Hide",
+    "edit": "Edit",
+    "status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published",
+      "HIDDEN": "Hidden"
+    },
+    "roomTypes": {
+      "PRIVATE": "Private room",
+      "SHARED": "Shared room",
+      "STUDIO": "Studio"
+    },
+    "fields": {
+      "title": "Title",
+      "description": "Description",
+      "address": "Address",
+      "addressDetail": "Address detail",
+      "district": "District",
+      "amenities": "Amenities (comma separated)",
+      "houseRules": "House rules",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "pinHint": "Optional: set an exact pin. Leave it empty to look up the address.",
+      "roomName": "Room name",
+      "roomType": "Room type",
+      "capacity": "Capacity",
+      "monthlyRent": "Monthly rent (KRW)",
+      "deposit": "Deposit (KRW)",
+      "options": "Options (comma separated)"
+    },
+    "photos": {
+      "title": "Photos",
+      "upload": "Upload photo",
+      "none": "No photos yet."
+    },
+    "blocks": {
+      "title": "Unavailable periods",
+      "none": "No unavailable periods.",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "reason": "Reason",
+      "add": "Add period",
+      "remove": "Remove"
+    }
   },
   "errors": {
     "INVALID_DATE": "That date is not valid.",
@@ -47,6 +100,8 @@
     "FORBIDDEN": "You do not have permission to do that.",
     "BOOKING_CONFLICT": "These dates are no longer available.",
     "INVALID_FILE": "Please upload a JPEG, PNG or WebP image under 5 MB.",
-    "UPLOAD_UNAVAILABLE": "Photo upload is not available right now."
+    "UPLOAD_UNAVAILABLE": "Photo upload is not available right now.",
+    "VALIDATION_FAILED": "Please check the highlighted fields and try again.",
+    "INTERNAL": "Something went wrong. Please try again."
   }
 }

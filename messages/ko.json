@@ -35,7 +35,60 @@
     "title": "호스트 대시보드",
     "properties": "숙소",
     "newProperty": "숙소 추가",
-    "forbidden": "이 페이지에 접근할 권한이 없습니다."
+    "forbidden": "이 페이지에 접근할 권한이 없습니다.",
+    "noProperties": "아직 등록한 숙소가 없습니다.",
+    "editProperty": "숙소 정보",
+    "rooms": "방",
+    "noRooms": "아직 방이 없습니다.",
+    "addRoom": "방 추가",
+    "editRoom": "방 수정",
+    "back": "뒤로",
+    "saved": "저장되었습니다.",
+    "publish": "게시",
+    "hide": "숨김",
+    "edit": "수정",
+    "status": {
+      "DRAFT": "초안",
+      "PUBLISHED": "게시됨",
+      "HIDDEN": "숨김"
+    },
+    "roomTypes": {
+      "PRIVATE": "개인실",
+      "SHARED": "공용실",
+      "STUDIO": "스튜디오"
+    },
+    "fields": {
+      "title": "제목",
+      "description": "설명",
+      "address": "주소",
+      "addressDetail": "상세 주소",
+      "district": "구",
+      "amenities": "편의시설 (쉼표로 구분)",
+      "houseRules": "하우스 룰",
+      "latitude": "위도",
+      "longitude": "경도",
+      "pinHint": "선택: 정확한 위치를 직접 지정합니다. 비워 두면 주소로 찾습니다.",
+      "roomName": "방 이름",
+      "roomType": "방 유형",
+      "capacity": "수용 인원",
+      "monthlyRent": "월세 (원)",
+      "deposit": "보증금 (원)",
+      "options": "옵션 (쉼표로 구분)"
+    },
+    "photos": {
+      "title": "사진",
+      "upload": "사진 업로드",
+      "none": "아직 사진이 없습니다."
+    },
+    "blocks": {
+      "title": "입주 불가 기간",
+      "none": "입주 불가 기간이 없습니다.",
+      "startDate": "시작일",
+      "endDate": "종료일",
+      "reason": "사유",
+      "add": "기간 추가",
+      "remove": "삭제"
+    }
   },
   "errors": {
     "INVALID_DATE": "유효하지 않은 날짜입니다.",
@@ -47,6 +100,8 @@
     "FORBIDDEN": "이 작업을 수행할 권한이 없습니다.",
     "BOOKING_CONFLICT": "선택한 날짜는 더 이상 예약할 수 없습니다.",
     "INVALID_FILE": "5MB 이하의 JPEG, PNG 또는 WebP 이미지를 업로드해 주세요.",
-    "UPLOAD_UNAVAILABLE": "현재 사진을 업로드할 수 없습니다."
+    "UPLOAD_UNAVAILABLE": "현재 사진을 업로드할 수 없습니다.",
+    "VALIDATION_FAILED": "표시된 항목을 확인한 뒤 다시 시도해 주세요.",
+    "INTERNAL": "문제가 발생했습니다. 다시 시도해 주세요."
   }
 }
