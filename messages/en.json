@@ -1,0 +1,50 @@
+{
+  "common": {
+    "appName": "hometohome",
+    "tagline": "Monthly rooms in Seoul",
+    "nav": {
+      "search": "Find a room",
+      "admin": "Host dashboard",
+      "language": "Language"
+    },
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signInTitle": "Sign in to hometohome",
+    "signInEmailLabel": "Email address",
+    "signInEmailButton": "Email me a sign-in link",
+    "signInGoogle": "Continue with Google",
+    "signInUnavailable": "Sign-in is currently unavailable.",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "search": {
+    "title": "Find a monthly room in Seoul",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "submit": "Search",
+    "noResults": "No rooms match your search."
+  },
+  "room": {
+    "perMonth": "per month",
+    "deposit": "Deposit",
+    "approximateLocation": "Approximate location",
+    "bookNow": "Request to book"
+  },
+  "admin": {
+    "title": "Host dashboard",
+    "properties": "Properties",
+    "newProperty": "Add a property",
+    "forbidden": "You do not have access to this page."
+  },
+  "errors": {
+    "INVALID_DATE": "That date is not valid.",
+    "INVALID_DATE_RANGE": "The check-out date must be after the check-in date.",
+    "STAY_TOO_SHORT": "The minimum stay is one month (at least 30 nights).",
+    "STAY_TOO_LONG": "The maximum stay is 12 months.",
+    "GEOCODE_FAILED": "We could not find that address. Please check it and try again.",
+    "NOT_FOUND": "We could not find what you were looking for.",
+    "FORBIDDEN": "You do not have permission to do that.",
+    "BOOKING_CONFLICT": "These dates are no longer available."
+  }
+}
