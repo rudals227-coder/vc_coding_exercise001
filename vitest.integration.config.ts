@@ -4,6 +4,8 @@ export default defineConfig({
   resolve: { tsconfigPaths: true },
   test: {
     environment: "node",
+    globalSetup: ["tests/integration/global-setup.ts"],
+    setupFiles: ["tests/integration/setup-env.ts"],
     include: ["tests/integration/**/*.test.ts"],
     passWithNoTests: true,
     fileParallelism: false,

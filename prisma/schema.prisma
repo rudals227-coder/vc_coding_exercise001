@@ -1,0 +1,321 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  GUEST
+  HOST
+  ADMIN
+}
+
+enum ListingStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+}
+
+enum RoomType {
+  PRIVATE
+  SHARED
+  STUDIO
+}
+
+enum BookingStatus {
+  REQUESTED
+  APPROVED
+  CONFIRMED
+  COMPLETED
+  REJECTED
+  EXPIRED
+  CANCELLED
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  VOID
+  OVERDUE
+}
+
+enum PaymentChannel {
+  EXIMBAY
+  PAYPAL
+}
+
+enum Currency {
+  KRW
+  USD
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  PARTIAL_CANCELLED
+}
+
+enum RefundStatus {
+  REQUESTED
+  DONE
+  FAILED
+}
+
+enum DepositEntryType {
+  HELD
+  DEDUCTION
+  RETURNED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  emailVerified DateTime?
+  image         String?
+  roles         Role[]    @default([GUEST])
+  locale        String    @default("en")
+  nationality   String?
+  phone         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts   Account[]
+  sessions   Session[]
+  properties Property[]
+  bookings   Booking[]
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Property {
+  id            String        @id @default(cuid())
+  hostId        String
+  title         String
+  description   String
+  address       String
+  addressDetail String        @default("")
+  lat           Float
+  lng           Float
+  approxLat     Float
+  approxLng     Float
+  district      String
+  amenities     String[]
+  houseRules    String        @default("")
+  status        ListingStatus @default(DRAFT)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  host  User   @relation(fields: [hostId], references: [id])
+  rooms Room[]
+
+  @@index([district, status])
+  @@index([hostId])
+}
+
+model Room {
+  id          String        @id @default(cuid())
+  propertyId  String
+  name        String
+  roomType    RoomType
+  capacity    Int
+  monthlyRent Int
+  deposit     Int
+  options     String[]
+  photos      String[]
+  status      ListingStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  property Property    @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  blocks   RoomBlock[]
+  bookings Booking[]
+
+  @@index([propertyId])
+}
+
+model RoomBlock {
+  id        String   @id @default(cuid())
+  roomId    String
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  reason    String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([roomId])
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  roomId        String
+  guestId       String
+  checkIn       DateTime      @db.Date
+  checkOut      DateTime      @db.Date
+  status        BookingStatus @default(REQUESTED)
+  holdExpiresAt DateTime?
+  guestMessage  String        @default("")
+  priceSnapshot Json
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  room           Room           @relation(fields: [roomId], references: [id])
+  guest          User           @relation(fields: [guestId], references: [id])
+  invoices       Invoice[]
+  depositEntries DepositEntry[]
+
+  @@index([roomId, status])
+  @@index([guestId])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  bookingId     String
+  seq           Int
+  periodStart   DateTime      @db.Date
+  periodEnd     DateTime      @db.Date
+  rentAmount    Int
+  depositAmount Int           @default(0)
+  dueDate       DateTime      @db.Date
+  status        InvoiceStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  booking  Booking   @relation(fields: [bookingId], references: [id])
+  payments Payment[]
+
+  @@unique([bookingId, seq])
+}
+
+model Payment {
+  id               String         @id @default(cuid())
+  invoiceId        String
+  channel          PaymentChannel
+  portonePaymentId String         @unique
+  currency         Currency
+  amount           Int
+  amountKrw        Int
+  fxRate           Decimal?       @db.Decimal(10, 2)
+  status           PaymentStatus  @default(PENDING)
+  paidAt           DateTime?
+  raw              Json?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  invoice Invoice  @relation(fields: [invoiceId], references: [id])
+  refunds Refund[]
+
+  @@index([invoiceId])
+}
+
+model Refund {
+  id        String       @id @default(cuid())
+  paymentId String
+  amount    Int
+  currency  Currency
+  reason    String
+  status    RefundStatus @default(REQUESTED)
+  createdBy String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+
+  @@index([paymentId])
+}
+
+model DepositEntry {
+  id        String           @id @default(cuid())
+  bookingId String
+  type      DepositEntryType
+  amountKrw Int
+  memo      String           @default("")
+  createdBy String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@index([bookingId])
+}
+
+model FxRate {
+  id        String   @id @default(cuid())
+  date      DateTime @unique @db.Date
+  krwPerUsd Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WebhookEvent {
+  id          String    @id @default(cuid())
+  eventId     String    @unique
+  type        String
+  payload     Json
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  entity    String
+  entityId  String
+  action    String
+  from      String?
+  to        String?
+  meta      Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([entity, entityId])
+}

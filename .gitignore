@@ -42,3 +42,6 @@ next-env.d.ts
 
 !.env.example
 .superpowers/
+
+# generated prisma client
+/src/generated
