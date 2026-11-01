@@ -13,7 +13,8 @@
     "test:e2e": "playwright test",
     "db:up": "docker compose up -d",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "db:seed:demo": "tsx prisma/seed-demo.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
