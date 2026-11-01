@@ -7,6 +7,8 @@ export const ALL_ERROR_CODES = [
   "NOT_FOUND",
   "FORBIDDEN",
   "BOOKING_CONFLICT",
+  "INVALID_FILE",
+  "UPLOAD_UNAVAILABLE",
 ] as const;
 
 export type ErrorCode = (typeof ALL_ERROR_CODES)[number];
