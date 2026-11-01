@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createRoomAction, updateRoomAction } from "@/app/[locale]/admin/actions";
 import type { ActionResult } from "@/app/[locale]/admin/action-utils";
-import { Field, MoneyInput, nativeSelectClass, ResultMessage, splitList } from "./form-bits";
+import { ROOM_OPTIONS, type RoomOption } from "@/modules/listings/schemas";
+import { Field, MoneyInput, nativeSelectClass, ResultMessage } from "./form-bits";
 
 type RoomType = "PRIVATE" | "SHARED" | "STUDIO";
 const ROOM_TYPES: RoomType[] = ["PRIVATE", "SHARED", "STUDIO"];
@@ -21,10 +22,12 @@ type Defaults = {
   options: string[];
 };
 
+
 type Props = { propertyId: string; roomId?: undefined } | { roomId: string; propertyId?: undefined };
 
 export function RoomForm({ propertyId, roomId, defaults }: Props & { defaults?: Defaults }) {
   const t = useTranslations("admin");
+  const to = useTranslations("room.optionLabels");
   const router = useRouter();
   const [pending, start] = useTransition();
   const [result, setResult] = useState<ActionResult | null>(null);
@@ -43,7 +46,7 @@ export function RoomForm({ propertyId, roomId, defaults }: Props & { defaults?: 
       capacity: Number(str("capacity")),
       monthlyRent: rent ?? Number.NaN,
       deposit: deposit ?? Number.NaN,
-      options: splitList(str("options")),
+      options: f.getAll("options").map(String) as RoomOption[],
     };
     start(async () => {
       const res = roomId
@@ -97,7 +100,19 @@ export function RoomForm({ propertyId, roomId, defaults }: Props & { defaults?: 
         <MoneyInput id="deposit" value={deposit} onChange={setDeposit} />
       </Field>
       <Field id="options" label={t("fields.options")} errors={fe?.options}>
-        <Input id="options" name="options" defaultValue={defaults?.options.join(", ")} />
+        <div id="options" className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          {ROOM_OPTIONS.map((o) => (
+            <label key={o} className="flex items-center gap-1.5">
+              <input
+                type="checkbox"
+                name="options"
+                value={o}
+                defaultChecked={defaults?.options.includes(o)}
+              />
+              {to(o)}
+            </label>
+          ))}
+        </div>
       </Field>
       <ResultMessage result={result} />
       {result?.ok && roomId && <p role="status" className="text-sm">{t("saved")}</p>}

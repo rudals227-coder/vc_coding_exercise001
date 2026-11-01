@@ -31,6 +31,7 @@
     "minRent": "Min rent (KRW)",
     "maxRent": "Max rent (KRW)",
     "sort": "Sort by",
+    "options": "Options",
     "sortNewest": "Newest",
     "sortPriceAsc": "Price: low to high",
     "sortPriceDesc": "Price: high to low",
@@ -50,6 +51,16 @@
     "capacity": "Capacity: {count}",
     "amenities": "Amenities",
     "options": "Options",
+    "optionLabels": {
+      "private_bathroom": "Private bathroom",
+      "wifi": "Wi-Fi",
+      "desk": "Desk",
+      "air_conditioner": "Air conditioner",
+      "heating": "Heating",
+      "washer": "Washer",
+      "kitchen": "Kitchen",
+      "balcony": "Balcony"
+    },
     "houseRules": "House rules",
     "nights": "{count, plural, one {# night} other {# nights}}",
     "quote": {
@@ -103,7 +114,7 @@
       "capacity": "Capacity",
       "monthlyRent": "Monthly rent (KRW)",
       "deposit": "Deposit (KRW)",
-      "options": "Options (comma separated)"
+      "options": "Options"
     },
     "photos": {
       "title": "Photos",

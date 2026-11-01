@@ -61,7 +61,9 @@ async function Content({ params, searchParams }: Pick<Props, "params" | "searchP
       {room.options.length > 0 && (
         <section>
           <h2 className="font-semibold">{t("options")}</h2>
-          <p className="text-sm">{room.options.join(", ")}</p>
+          <p className="text-sm">{room.options
+              .map((o) => (t.has(`optionLabels.${o}`) ? t(`optionLabels.${o}`) : o))
+              .join(", ")}</p>
         </section>
       )}
       {room.houseRules && (

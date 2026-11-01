@@ -7,6 +7,11 @@ export const SEOUL_DISTRICTS = [
   "jung", "jungnang",
 ] as const;
 
+export const ROOM_OPTIONS = [
+  "private_bathroom", "wifi", "desk", "air_conditioner", "heating", "washer", "kitchen", "balcony",
+] as const;
+export type RoomOption = (typeof ROOM_OPTIONS)[number];
+
 export type SeoulDistrict = (typeof SEOUL_DISTRICTS)[number];
 
 const text = (max: number) => z.string().trim().max(max);
@@ -30,7 +35,10 @@ export const roomInput = z.object({
   capacity: z.number().int().min(1).max(8),
   monthlyRent: money,
   deposit: money,
-  options: z.array(text(60).min(1)).max(50),
+  options: z
+    .array(z.enum(ROOM_OPTIONS))
+    .max(50)
+    .transform((o) => [...new Set(o)]),
 });
 export type RoomInput = z.infer<typeof roomInput>;
 

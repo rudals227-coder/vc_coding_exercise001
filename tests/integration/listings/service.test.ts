@@ -21,7 +21,7 @@ const roomIn = {
   capacity: 2,
   monthlyRent: 900000,
   deposit: 1000000,
-  options: ["desk"],
+  options: ["desk" as const],
 };
 
 const geo: Geocoder = async () => ({ lat: 37.5, lng: 127.0 });
@@ -100,6 +100,18 @@ describe("listingsService", () => {
     await svc.updateRoom({ id: prop.hostId, roles: ["HOST"] }, room.id, roomIn);
     await svc.updateRoom(admin, room.id, { ...roomIn, name: "By admin" });
     expect((await db.room.findUniqueOrThrow({ where: { id: room.id } })).name).toBe("By admin");
+  });
+
+  it("appends photos atomically under concurrency and enforces ownership", async () => {
+    const room = await makeRoom();
+    const prop = await db.property.findUniqueOrThrow({ where: { id: room.propertyId } });
+    const owner = { id: prop.hostId, roles: ["HOST" as const] };
+    const other = await makeUser(["HOST"]);
+    const svc = listingsService({ db, geocode: geo });
+    await Promise.all(["a", "b", "c", "d"].map((n) => svc.appendRoomPhoto(owner, room.id, `https://x/${n}.jpg`)));
+    const photos = (await db.room.findUniqueOrThrow({ where: { id: room.id } })).photos;
+    expect([...photos].sort()).toEqual(["https://x/a.jpg", "https://x/b.jpg", "https://x/c.jpg", "https://x/d.jpg"]);
+    await expectCodeAsync(svc.appendRoomPhoto(other, room.id, "https://x/e.jpg"), "FORBIDDEN");
   });
 
   it("NOT_FOUND for missing parents", async () => {

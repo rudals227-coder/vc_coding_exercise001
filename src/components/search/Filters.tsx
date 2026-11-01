@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { SEOUL_DISTRICTS } from "@/modules/listings/schemas";
+import { ROOM_OPTIONS, SEOUL_DISTRICTS } from "@/modules/listings/schemas";
 type Values = Record<string, string | number | string[] | undefined>;
 
 const ROOM_TYPES = ["PRIVATE", "SHARED", "STUDIO"] as const;
@@ -16,6 +16,8 @@ const control = "rounded border bg-transparent px-2 py-1";
 export function Filters({ values, errors }: { values: Values; errors: string[] }) {
   const t = useTranslations("search");
   const tt = useTranslations("admin.roomTypes");
+  const to = useTranslations("room.optionLabels");
+  const selected = [values.options ?? []].flat().map(String);
   return (
     <form method="get" className="grid gap-3" data-testid="filters">
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -73,6 +75,15 @@ export function Filters({ values, errors }: { values: Values; errors: string[] }
           </button>
         </div>
       </div>
+      <fieldset className="flex flex-wrap gap-x-4 gap-y-1 text-sm" data-testid="option-filters">
+        <legend className="mb-1">{t("options")}</legend>
+        {ROOM_OPTIONS.map((o) => (
+          <label key={o} className="flex items-center gap-1.5">
+            <input type="checkbox" name="options" value={o} defaultChecked={selected.includes(o)} />
+            {to(o)}
+          </label>
+        ))}
+      </fieldset>
       {errors.length > 0 && (
         <ul role="alert" data-testid="filter-error" className="text-sm text-red-600">
           {errors.map((e) => (

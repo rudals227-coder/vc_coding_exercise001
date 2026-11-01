@@ -31,6 +31,7 @@
     "minRent": "최소 월세 (원)",
     "maxRent": "최대 월세 (원)",
     "sort": "정렬",
+    "options": "옵션",
     "sortNewest": "최신순",
     "sortPriceAsc": "낮은 가격순",
     "sortPriceDesc": "높은 가격순",
@@ -50,6 +51,16 @@
     "capacity": "수용 인원: {count}명",
     "amenities": "편의시설",
     "options": "옵션",
+    "optionLabels": {
+      "private_bathroom": "개인 욕실",
+      "wifi": "와이파이",
+      "desk": "책상",
+      "air_conditioner": "에어컨",
+      "heating": "난방",
+      "washer": "세탁기",
+      "kitchen": "주방",
+      "balcony": "발코니"
+    },
     "houseRules": "하우스 규칙",
     "nights": "{count}박",
     "quote": {
@@ -103,7 +114,7 @@
       "capacity": "수용 인원",
       "monthlyRent": "월세 (원)",
       "deposit": "보증금 (원)",
-      "options": "옵션 (쉼표로 구분)"
+      "options": "옵션"
     },
     "photos": {
       "title": "사진",

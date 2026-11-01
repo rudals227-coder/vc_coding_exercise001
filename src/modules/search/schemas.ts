@@ -2,7 +2,7 @@ import { z } from "zod";
 import { parseDateOnly } from "@/lib/date-only";
 import { DomainError } from "@/lib/errors";
 import { RoomType } from "@/generated/prisma/enums";
-import { SEOUL_DISTRICTS } from "@/modules/listings/schemas";
+import { ROOM_OPTIONS, SEOUL_DISTRICTS } from "@/modules/listings/schemas";
 import { validateStay } from "@/modules/pricing";
 
 /** URL 쿼리에서 빈 문자열은 "미지정"으로 취급한다. */
@@ -25,10 +25,10 @@ export const searchQuery = z
       roomType: z.preprocess(blank, z.enum(RoomType, V).optional()),
       options: z.preprocess(
         (v) => (typeof v === "string" ? (v === "" ? undefined : [v]) : v),
-        z.array(z.string(V).min(1, V), V).optional(),
+        z.array(z.enum(ROOM_OPTIONS, V), V).optional(),
       ),
       sort: z.preprocess(blank, z.enum(["price_asc", "price_desc", "newest"], V).default("newest")),
-      page: z.preprocess(blank, z.coerce.number(V).int(V).min(1, V).default(1)),
+      page: z.preprocess(blank, z.coerce.number(V).int(V).min(1, V).max(500, V).default(1)),
     },
     V,
   )

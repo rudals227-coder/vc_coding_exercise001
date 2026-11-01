@@ -74,6 +74,17 @@ describe("searchRooms", () => {
     expect((await searchRooms(searchQuery.parse({ options: "desk" }))).total).toBe(4);
   });
 
+  it("options filter returns only rooms that have every requested option", async () => {
+    const both = await makeRoom({ options: ["wifi", "washer", "desk"] });
+    await makeRoom({ options: ["wifi"] });
+    await makeRoom({ options: ["washer", "kitchen"] });
+    await makeRoom({ options: [] });
+    const r = await searchRooms(searchQuery.parse({ options: ["wifi", "washer"] }));
+    expect(r.items.map((i) => i.roomId)).toEqual([both.id]);
+    expect((await searchRooms(searchQuery.parse({ options: "kitchen" }))).total).toBe(1);
+    expect(searchQuery.safeParse({ options: ["Wi-Fi"] }).success).toBe(false);
+  });
+
   it("sorts by price asc/desc and newest, and maps public fields", async () => {
     const mid = await makeRoom({ monthlyRent: 700000, photos: ["p1.jpg", "p2.jpg"], name: "Mid" });
     const low = await makeRoom({ monthlyRent: 500000 });
